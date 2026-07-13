@@ -70,7 +70,7 @@ router.get("/", async(req, res) => {
 
 });
 
-router.get("/:id/openhouses", async (req, use) => {
+router.get("/:id/openhouses", async (req, res) => {
     try {
         const { id } = req.params;
 
