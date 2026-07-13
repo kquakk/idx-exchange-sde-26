@@ -91,6 +91,33 @@ router.get("/:id/openhouses", async (req, use) => {
             ORDER BY OpenHouseDate ASC, OH_StartTime ASC`,
             [id]
         );
-})
+
+        res.json({ listingId: id, openHouses });
+    } catch (e) {
+        console.error("Error in GET /api/properties/:id/opehouses:", e);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.get("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id || id.length > 50 || !/^[A-Za-z0-9_-]+$/.test(id)) {
+            return res.status(400).json({ error: "Invalid listing ID format" });
+        }
+
+        const [rows] = await pool.query("SELECT * FROM rets_property WHERE L_ListingID = ?", [id]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: `Property ${id} not found` });
+        }
+
+        res.json(rows[0]);
+    } catch (e) {
+        console.error("Error in GET /api/propert9es/:id:", e);
+        res.status(500).json({ error: "Internal server erroro" });
+    }
+});
 
 module.exports = router;
