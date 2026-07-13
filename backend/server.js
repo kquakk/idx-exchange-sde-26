@@ -7,9 +7,11 @@ const pool = require("./db/pool");
 const app = express();
 const PORT = process.env.PORT;
 const propertiesRouter = require("./routes/properties");
+const requestLogger = require("./middleware/logger");
 
 app.use(cors());
 app.use(express.json());
+app.use(requestLogger);
 app.use("/api/properties", propertiesRouter);
 
 app.get("/api/health", async (req, res) => {

@@ -70,4 +70,27 @@ router.get("/", async(req, res) => {
 
 });
 
+router.get("/:id/openhouses", async (req, use) => {
+    try {
+        const { id } = req.params;
+
+        if (!id || id.length > 50 || !/^[A-Za-z0-9_-]+$/.test(id)) {
+            return res.status(400).json({ error: "Invalid listing ID format" });
+        }
+
+        const [propertyRows] = await pool.query( "SELECT L_ListingID FROM rets_property WHERE L_ListingID = ?", [id]);
+
+        if (propertyRows.length === 0) {
+            return res.status(404).json({ error: `Property ${id} not found` });
+        }
+
+        const [openHouses] = await pool.query(
+            `SELECT L_ListingID, OpenHouseDate, OH_StartTime, OH_EndTime, all_data
+            FROM rets_openhouse
+            WHERE L_ListingID = ?
+            ORDER BY OpenHouseDate ASC, OH_StartTime ASC`,
+            [id]
+        );
+})
+
 module.exports = router;
