@@ -1,6 +1,6 @@
 const BASE_URL = "/api";
 
-async function rqeuest(path) {
+async function request(path) {
     const response = await fetch(`${BASE_URL}${path}`);
 
     if (!response.ok) {
@@ -30,5 +30,5 @@ export function fetchPropertyDetail(id) {
 }
 
 export function fetchOpenHouse(id) {
-    return rqeuest(`/properties/${id}/openhouses`);
+    return request(`/properties/${id}/openhouses`);
 }
