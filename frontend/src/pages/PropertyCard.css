@@ -1,0 +1,37 @@
+.listing-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px;
+}
+
+.listing-page__header {
+    margin-bottom: 24px;
+}
+
+.listing-page__header h1 {
+    margin: 0 0 6px;
+    font-size: 1.75rem;
+}
+
+.listing-page__count {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.listing-page__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.listing-status {
+    padding: 60px 20px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.listing-status--error {
+    color: #c0392b;
+}
