@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchProperties } from "../api/client";
 import PropertyCard from "../components/PropertyCard";
+import PropertyFilter from "../components/PropertyFilters";
 import "./ListingPage.css";
 
 function ListingPage() {
@@ -8,36 +9,32 @@ function ListingPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        let cancelled = false;
+    const latestRequestId = useRef(0);
+
+    const loadProperties = (filters = {}) => {
+        const requestId = ++latestRequestId.current;
 
         setLoading(true);
         setError(null);
 
-        fetchProperties({ limit: 20, offset: 0 }).then((result) => {
-            if (!cancelled) {
-                setData(result);
-                setLoading(false);
+        fetchProperties({ limit: 20, offset: 0, ...filters }).then((result) => {
+            if (requestId !== latestRequestId.current) {
+                return;
             }
+            setData(result);
+            setLoading(false);
         }).catch((e) => {
-            if (!cancelled) {
-                setError(e.message);
-                setLoading(false);
+            if (requestId !== latestRequestId.current) {
+                return;
             }
+            setError(e.message);
+            setLoading(false);
         });
+    };
 
-        return () => {
-            cancelled = true;
-        };
+    useEffect(() => {
+        loadProperties();
     }, []);
-
-    if (loading) {
-        return <div className="listing-status">Loading properties...</div>
-    }
-
-    if (error) {
-        return <div className="listing-status listing-status--error">Failed to load properties: {error}</div> 
-    }
 
     return (
         <div className="listing-page">
