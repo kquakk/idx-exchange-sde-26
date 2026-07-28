@@ -18,7 +18,7 @@ function PropertyFilters({ onSearch, onClear }) {
     };
 
     const handleSearch = (e) => {
-        e.preventDefaults();
+        e.preventDefault();
 
         const cleaned = {};
         for (const [key, value] of Object.entries(filters)) {
@@ -39,17 +39,17 @@ function PropertyFilters({ onSearch, onClear }) {
         <form className="filters" onSubmit={handleSearch}>
             <input 
                 type="text"
-                placeholder="city"
+                placeholder="City"
                 value={filters.city}
                 onChange={updateField("city")}
                 aria-label="City"
             />
             <input
                 type="text"
-                placeholder="zipcode"
+                placeholder="ZIP Code"
                 value={filters.zipcode}
                 onChange={updateField("zipcode")}
-                aria-label="zipcode"
+                aria-label="ZIP Code"
             />
             <input
                 type="number"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchProperties } from "../api/client";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilter from "../components/PropertyFilters";
@@ -82,3 +82,5 @@ function ListingPage() {
         </div>
     );
 }
+
+export default ListingPage;
