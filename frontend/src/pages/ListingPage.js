@@ -40,17 +40,45 @@ function ListingPage() {
         <div className="listing-page">
             <div className="listing-page__header">
                 <h1>Properties</h1>
-                <p className="listing-page_count">
-                    Showing {data.results.length} of {data.total} properties
-                </p>
             </div>
-            <div className="listing-page__grid">
-                {data.results.map((property) => (
-                    <PropertyCard key={property.L_ListingID} property={property}/>
-                ))}
-            </div>
+
+            <PropertyFilter
+                onSearch={loadProperties}
+                onClear={() => loadProperties()}
+            />
+
+            {loading && (
+                <div className="listing-status">Loading properties...</div>
+            )}
+
+            {error && !loading && (
+                <div className="listing-status listing-status--error">
+                    Failed to load properties: {error}
+                </div>
+            )}
+
+            {!loading && !error && data && (
+                <>
+                    <p className="listing-page_count">
+                        Showing {data.results.length} of {data.total} properties
+                    </p>
+
+                    {data.results.length === 0 ? (
+                        <div className="listing-status">
+                            No properties found. Try adjusting your filters.
+                        </div>
+                    ) : (
+                        <div className="listing-page__grid">
+                            {data.results.map((property) => (
+                                <PropertyCard
+                                    key={property.L_ListingID}
+                                    property={property}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </>
+            )}
         </div>
     );
 }
-
-export default ListingPage;
