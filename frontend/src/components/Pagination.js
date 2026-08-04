@@ -30,7 +30,7 @@ export function getPageItems(currentPage, totalPages) {
 
     const sorted = Array.from(items).sort((a, b) => a - b);
     const result = [];
-    for (let i = 0, i < sorted.length; i++) {
+    for (let i = 0; i < sorted.length; i++) {
         result.push(sorted[i]);
         if (i < sorted.length - 1 && sorted[i + 1] - sorted[i] > 1) {
             result.push("...");
