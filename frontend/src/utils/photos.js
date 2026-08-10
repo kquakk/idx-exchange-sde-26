@@ -1,3 +1,5 @@
+export const PLACEHOLDER = "https://via.placeholder.com/400x300?text=No+Photo";
+
 export function parsePhotos(rawPhotos) {
     if (!rawPhotos) {
         return [];
