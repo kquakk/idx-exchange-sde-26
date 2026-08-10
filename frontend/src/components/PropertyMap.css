@@ -1,0 +1,33 @@
+.property-map { margin-top: 28px; }
+
+.property-map__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.property-map__header h2 { margin: 0; font-size: 1.2rem; }
+
+.property-map__directions {
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.property-map__directions:hover { text-decoration: underline; }
+
+.property-map__frame {
+    width: 100%;
+    height: 340px;
+    border: 0;
+    border-radius: 8px;
+}
+
+.property-map__missing-key {
+    padding: 40px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    text-align: center;
+    color: #666;
+}
