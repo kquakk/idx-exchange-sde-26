@@ -1,12 +1,32 @@
-export function getFirstPhoto(rawPhotos) {
+export function parsePhotos(rawPhotos) {
+    if (!rawPhotos) {
+        return [];
+    }
+
+    if (Array.isArray(rawPhotos)) {
+        return rawPhotos.filter((url) => typeof url === "string" && url.trim());
+    }
+
+    if (typeof rawPhotos !== "string") {
+        return [];
+    }
+
     try {
         const parsed = JSON.parse(rawPhotos);
-        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]) {
-            return parsed[0]
+        if (Array.isArray(parsed)) {
+            return parsed.filter((url) => typeof url === "string" && url.trim());
         }
+        if (typeof parsed === "string" && parsed.trim()) {
+            return [parsed];
+        }
+
+        return [];
     } catch {
-        if (typeof rawPhotos === "string" && rawPhotos.startsWith("http")) {
-            return rawPhotos;
-        }
+        return rawPhotos.startsWith("http") ? [rawPhotos] : [];
     }
+}
+
+export function getFirstPhoto(rawPhotos) {
+    const photos = parsePhotos(rawPhotos);
+    return photos[0] || PLACEHOLDER;
 }
