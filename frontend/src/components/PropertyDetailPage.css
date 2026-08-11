@@ -1,0 +1,63 @@
+.detail-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+}
+
+.detail-page__back {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.detail-page__back:hover { text-decoration: underline; }
+
+.detail-page__header { margin-top: 20px; }
+
+.detail-page__price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111;
+}
+
+.detail-page__address { font-size: 1.1rem; color: #333; margin-top: 4px; }
+.detail-page__location { color: #777; }
+
+.detail-page__stats {
+    display: flex;
+    gap: 32px;
+    margin: 24px 0;
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.stat { display: flex; flex-direction: column; }
+.stat__value { font-size: 1.3rem; font-weight: 600; color: #111; }
+.stat__label { font-size: 0.82rem; color: #777; text-transform: uppercase; }
+
+.detail-page__section { margin-top: 28px; }
+.detail-page__section h2 { font-size: 1.2rem; margin: 0 0 10px; }
+.detail-page__remarks { line-height: 1.6; color: #333; margin: 0; }
+
+.detail-page__facts {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 8px 16px;
+    margin: 0;
+}
+
+.detail-page__facts dt { color: #777; font-size: 0.9rem; }
+.detail-page__facts dd { margin: 0; color: #222; font-size: 0.95rem; }
+
+.detail-status {
+    padding: 60px 20px;
+    text-align: center;
+    font-size: 1.05rem;
+    color: #555;
+}
+
+.detail-status--error { color: #c0392b; }
