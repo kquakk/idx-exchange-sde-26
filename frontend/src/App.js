@@ -1,11 +1,16 @@
-import ListingPage from "./pages/ListingPage"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ListingPage from "./pages/ListingPage";
+import PropertyDetailPage from "./pages/PropertyDetailPage";
 import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <ListingPage />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ListingPage />} />
+        <Route path="/property/:id" element={<PropertyDetailPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
