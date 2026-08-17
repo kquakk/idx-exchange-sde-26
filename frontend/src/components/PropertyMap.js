@@ -4,7 +4,6 @@ function PropertyMap({ latitude, longitude, address }) {
     const lat = Number(latitude);
     const lng = Number(longitude);
 
-    // Only render when we have real coordinates
     if (!latitude || !longitude || Number.isNaN(lat) || Number.isNaN(lng)) {
         return null;
     }
@@ -17,7 +16,7 @@ function PropertyMap({ latitude, longitude, address }) {
         <div className="property-map">
             <div className="property-map__header">
                 <h2>Location</h2>
-                
+                <a
                     href={directionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"

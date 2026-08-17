@@ -2,9 +2,19 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db/pool");
 
+const SORT_COLUMNS = {
+    price: "L_SystemPrice",
+    dateListed: "L_ListingDate",
+    sqft: "LM_Int2_3",
+    beds: "L_Keyword2",
+}
+
+const SORT_ORDERS = ["asc", "desc"];
+
 router.get("/", async(req, res) => {
     try {
         const { city, zipcode, minPrice, maxPrice, beds, baths } = req.query;
+        const { sortBy, sortOrder } = req.query;
         let { limit, offset } = req.query;
 
         limit = limit === undefined ? 20 : Number(limit)
@@ -57,11 +67,31 @@ router.get("/", async(req, res) => {
         const [countRows] = await pool.query(countSql, values);
         const total = countRows[0].total;
 
-        const dataSql = `SELECT * FROM rets_property ${whereClause} LIMIT ? OFFSET ? `;
+        let orderByClause = "ORDER BY L_ListingID ASC";
+        if (sortBy) {
+            const column = SORT_COLUMNS[sortBy];
+            const direction = String(sortOrder || "asc").toLowerCase() === "desc" ? "DESC" : "ASC";
+            orderByClause = `ORDER BY ${column} ${direction}, L_ListingID ASC`;
+        }
+
+        const dataSql = `SELECT * FROM rets_property ${whereClause} ${orderByClause} LIMIT ? OFFSET ?`;
 
         const [rows] = await pool.query(dataSql, [...values, limit, offset]);
 
         res.json({ total, limit, offset, results: rows });
+
+        if (sortBy !== undefined && !Object.hasOwn(SORT_COLUMNS, sortBy)) {
+            return res.status(400).json({
+                error: `sortBy must be one of: ${Objects.keys(SORT_COLUMNS).join(", ")}`,
+            });
+        }
+
+        if (sortBy !== undefined && !SORT_ORDERS.includes(String(sortOrder).toLowerCase)) {
+            return res.status(400).json({
+                error: "sortOrder must be either 'asc' or 'desc'",
+            });
+        }
+        
 
     } catch (e) {
         console.error("Erorr in GET /api/properties: ", e);

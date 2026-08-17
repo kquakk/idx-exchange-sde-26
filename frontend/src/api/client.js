@@ -29,6 +29,6 @@ export function fetchPropertyDetail(id) {
     return request(`/properties/${id}`);
 }
 
-export function fetchOpenHouse(id) {
+export function fetchOpenHouses(id) {
     return request(`/properties/${id}/openhouses`);
 }
