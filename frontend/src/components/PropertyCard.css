@@ -52,3 +52,7 @@
     font-size: 0.85rem;
     margin-top: 2px;
 }
+
+.property-card__media {
+    position: relative;
+}

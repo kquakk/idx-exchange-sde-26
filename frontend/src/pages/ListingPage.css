@@ -35,3 +35,49 @@
 .listing-status--error {
     color: #c0392b;
 }
+
+.listing-page__back {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.listing-page__back:hover { 
+    text-decoration: underline; 
+}
+
+.listing-page__clear {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: 1px solid #d0d0d0;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    cursor: pointer;
+    color: #444;
+}
+
+.listing-page__clear:hover { 
+    background: #f3f4f6; 
+}
+
+.listing-page__favorites-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.listing-page__favorites-link:hover { 
+    text-decoration: underline; 
+}
+
+.listing-page__toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
