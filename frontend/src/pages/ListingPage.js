@@ -1,23 +1,27 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { fetchProperties } from "../api/client";
 import PropertyCard from "../components/PropertyCard";
 import PropertyFilter from "../components/PropertyFilters";
 import Pagination from "../components/Pagination";
+import PropertySort, { parseSortValue } from "../components/PropertySort";
+import useFavorites from "../hooks/useFavorites";
 import "./ListingPage.css";
 
 const ITEMS_PER_PAGE = 20;
 
 function ListingPage() {
-
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [activeFilters, setActiveFilters] = useState({});
+    const [sortValue, setSortValue] = useState("");
 
+    const { count: favoritesCount } = useFavorites();
     const latestRequestId = useRef(0);
 
-    const loadProperties = (filters, page) => {
+    const loadProperties = (filters, page, sort) => {
         const requestId = ++latestRequestId.current;
 
         setLoading(true);
@@ -25,38 +29,57 @@ function ListingPage() {
 
         const offset = (page - 1) * ITEMS_PER_PAGE;
 
-        fetchProperties({ limit: ITEMS_PER_PAGE, offset, ...filters })
+        fetchProperties({
+            limit: ITEMS_PER_PAGE,
+            offset,
+            ...filters,
+            ...parseSortValue(sort),
+        })
             .then((result) => {
-                if (requestId !== latestRequestId.current) return;
+                if (requestId !== latestRequestId.current) {
+                    return;
+                }
+
                 setData(result);
                 setLoading(false);
             })
             .catch((e) => {
-                if (requestId !== latestRequestId.current) return;
+                if (requestId !== latestRequestId.current) {
+                    return;
+                }
+                
                 setError(e.message);
                 setLoading(false);
             });
     };
 
     useEffect(() => {
-        loadProperties({}, 1);
+        loadProperties({}, 1, "");
     }, []);
 
     const handleSearch = (filters) => {
         setActiveFilters(filters);
         setCurrentPage(1);
-        loadProperties(filters, 1);
+        setSortValue("");
+        loadProperties(filters, 1, "");
     };
 
     const handleClear = () => {
         setActiveFilters({});
         setCurrentPage(1);
-        loadProperties({}, 1);
+        setSortValue("");
+        loadProperties({}, 1, "");
+    };
+
+    const handleSortChange = (nextSort) => {
+        setSortValue(nextSort);
+        setCurrentPage(1);
+        loadProperties(activeFilters, 1, nextSort);
     };
 
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
-        loadProperties(activeFilters, newPage);
+        loadProperties(activeFilters, newPage, sortValue);
         window.scrollTo(0, 0);
     };
 
@@ -74,9 +97,14 @@ function ListingPage() {
 
             <PropertyFilter onSearch={handleSearch} onClear={handleClear} />
 
-            {loading && (
-                <div className="listing-status">Loading properties...</div>
-            )}
+            <div className="listing-page__toolbar">
+                <Link to="/favorites" className="listing-page__favorites-link">
+                    ♥ Favorites ({favoritesCount})
+                </Link>
+                <PropertySort value={sortValue} onChange={handleSortChange} />
+            </div>
+
+            {loading && <div className="listing-status">Loading properties...</div>}
 
             {error && !loading && (
                 <div className="listing-status listing-status--error">
