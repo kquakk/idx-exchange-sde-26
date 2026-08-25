@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { parsePhotos, PLACEHOLDER } from "../utils/photos";
+import PropTypes from "prop-types";
 import "./PropertyImageGallery.css";
 
 function PropertyImageGallery({ rawPhotos, alt }) {
@@ -121,5 +122,13 @@ function PropertyImageGallery({ rawPhotos, alt }) {
         </div>
     );
 }
+
+PropertyImageGallery.propTypes = {
+    rawPhotos: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+    ]),
+    alt: PropTypes.string,
+};
 
 export default PropertyImageGallery;

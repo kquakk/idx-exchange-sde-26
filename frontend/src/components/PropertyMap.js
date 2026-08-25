@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import "./PropertyMap.css";
 
 function PropertyMap({ latitude, longitude, address }) {
@@ -43,5 +44,11 @@ function PropertyMap({ latitude, longitude, address }) {
         </div>
     );
 }
+
+PropertyMap.propTypes = {
+    latitude: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    longitude: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    address: PropTypes.string,
+};
 
 export default PropertyMap;

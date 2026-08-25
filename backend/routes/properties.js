@@ -82,7 +82,7 @@ router.get("/", async(req, res) => {
 
         if (sortBy !== undefined && !Object.hasOwn(SORT_COLUMNS, sortBy)) {
             return res.status(400).json({
-                error: `sortBy must be one of: ${Objects.keys(SORT_COLUMNS).join(", ")}`,
+                error: `sortBy must be one of: ${Object.keys(SORT_COLUMNS).join(", ")}`,
             });
         }
 
