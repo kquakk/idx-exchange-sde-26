@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import PropertyImageCarousel from "./PropertyImageCarousel";
 import FavoriteButton from "./FavoriteButton";
+import PropTypes from "prop-types";
 import "./PropertyCard.css";
 
 function formatPrice(price) {
@@ -39,5 +40,92 @@ function PropertyCard({ property }) {
         </Link>
     );
 }
+
+PropertyCard.propTypes = {
+    property: PropTypes.shape({
+        L_ListingID: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+            .isRequired,
+        L_Address: PropTypes.string,
+        L_City: PropTypes.string,
+        L_State: PropTypes.string,
+        L_Zip: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        L_SystemPrice: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+        ]),
+        L_Keyword2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        LM_Dec_3: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        LM_Int2_3: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        L_Photos: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.arrayOf(PropTypes.string),
+        ]),
+    }).isRequired,
+};
+
+PropertyFilters.propTypes = {
+    onSearch: PropTypes.func.isRequired,
+    onClear: PropTypes.func.isRequired,
+};
+
+Pagination.propTypes = {
+    currentPage: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+};
+
+PropertySort.propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
+
+PropertyImageCarousel.propTypes = {
+    rawPhotos: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+    ]),
+    alt: PropTypes.string,
+};
+PropertyImageCarousel.defaultProps = {
+    rawPhotos: null,
+    alt: "Property",
+};
+
+PropertyImageGallery.propTypes = {
+    rawPhotos: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+    ]),
+    alt: PropTypes.string,
+};
+
+PropertyMap.propTypes = {
+    latitude: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    longitude: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    address: PropTypes.string,
+};
+
+FavoriteButton.propTypes = {
+    listingId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+};
+
+OpenHouseList.propTypes = {
+    openHouses: PropTypes.arrayOf(
+        PropTypes.shape({
+            OpenHouseDate: PropTypes.string,
+            OH_StartTime: PropTypes.string,
+            OH_EndTime: PropTypes.string,
+            all_data: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.object,
+            ]),
+        })
+    ),
+};
+
+ErrorBoundary.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 export default PropertyCard;
