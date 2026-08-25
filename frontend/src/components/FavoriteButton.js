@@ -1,4 +1,5 @@
 import useFavorites from "../hooks/useFavorites";
+import PropTypes from "prop-types";
 import "./FavoriteButton.css";
 
 function FavoriteButton({ listingId }) {
@@ -23,5 +24,10 @@ function FavoriteButton({ listingId }) {
         </button>
     );
 }
+
+FavoriteButton.propTypes = {
+    listingId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+};
 
 export default FavoriteButton;

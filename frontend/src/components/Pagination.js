@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import "./Pagination.css";
 
 export function getPageItems(currentPage, totalPages) {
@@ -95,5 +96,11 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
         </nav>
     );
 }
+
+Pagination.propTypes = {
+    currentPage: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+};
 
 export default Pagination;

@@ -49,10 +49,10 @@ describe("getPageItems", () => {
 
 describe("Pagination component", () => {
     test("renders nothing when there is only one page", () => {
-        const { container } = render(
+        render(
             <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} />
         );
-        expect(container.firstChild).toBeNull();
+        expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
     });
 
     test("disables Previous button on the first page", () => {

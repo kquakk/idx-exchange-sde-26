@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import "./OpenHouseList.css";
 
 function extractRemarks(allData) {
@@ -91,5 +92,19 @@ function OpenHouseList({ openHouses }) {
         </div>
     );
 }
+
+OpenHouseList.propTypes = {
+    openHouses: PropTypes.arrayOf(
+        PropTypes.shape({
+            OpenHouseDate: PropTypes.string,
+            OH_StartTime: PropTypes.string,
+            OH_EndTime: PropTypes.string,
+            all_data: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.object,
+            ]),
+        })
+    ),
+};
 
 export default OpenHouseList;

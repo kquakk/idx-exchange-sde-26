@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { parsePhotos, PLACEHOLDER } from "../utils/photos";
+import PropTypes from "prop-types";
 import "./PropertyImageCarousel.css";
 
 function PropertyImageCarousel({ rawPhotos, alt }) {
@@ -58,5 +59,17 @@ function PropertyImageCarousel({ rawPhotos, alt }) {
         </div>
     );
 }
+
+PropertyImageCarousel.propTypes = {
+    rawPhotos: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+    ]),
+    alt: PropTypes.string,
+};
+PropertyImageCarousel.defaultProps = {
+    rawPhotos: null,
+    alt: "Property",
+};
 
 export default PropertyImageCarousel;

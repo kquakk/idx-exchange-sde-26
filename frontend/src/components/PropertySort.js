@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import "./PropertySort.css";
 
 export const SORT_OPTIONS = [
@@ -41,5 +42,10 @@ function PropertySort({ value, onChange }) {
         </div>
     );
 }
+
+PropertySort.propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
 
 export default PropertySort;
