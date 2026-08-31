@@ -12,7 +12,7 @@
     "test:coverage": "jest --coverage --runInBand"
   },
   "jest": {
-    "testEnvironemnt": "node",
+    "testEnvironment": "node",
     "collectCoverageFrom": [
       "routes/**/*.js",
       "middleware/**/*.js",
