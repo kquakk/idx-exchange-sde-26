@@ -28,6 +28,13 @@ router.get("/", async(req, res) => {
             return res.status(400).json({ error: "limit must be a non-negative integer" });
         }
 
+        const numericFilters = { minPrice, maxPrice, beds, baths };
+        for (const [key, value] of Object.entries(numericFilters)) {
+            if (value !== undefined && (isNaN(Number(value)) || Number(value) < 0)) {
+                return res.status(400).json({ error: `${key} must be a non-negative number` });
+            }
+        }
+
         const conditions = [];
         const values = [];
 
