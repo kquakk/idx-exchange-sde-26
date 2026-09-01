@@ -1,6 +1,14 @@
 import PropTypes from "prop-types";
 import "./Pagination.css";
 
+// Page numbers are collected into a Set before sorting so that overlapping
+// ranges (the always-visible first/last pages, and the window around the
+// current page) cannot produce a duplicate entry — the bug that rendered
+// the last page number twice near the end of a long result set.
+//
+// Ellipses are then derived from gaps between consecutive numbers rather
+// than inserted at fixed positions, which keeps the logic correct for any
+// combination of current page and total.
 export function getPageItems(currentPage, totalPages) {
 
     if (totalPages <= 7) {

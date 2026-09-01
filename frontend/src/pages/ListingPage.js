@@ -21,6 +21,10 @@ function ListingPage() {
     const { count: favoritesCount } = useFavorites();
     const latestRequestId = useRef(0);
 
+    // Each fetch is tagged with an incrementing ID. Responses check whether
+    // their ID is still the newest before writing to state, so a slow earlier
+    // request cannot overwrite the results of a later one — the cause of old
+    // results flashing in after a search/clear/search sequence.
     const loadProperties = (filters, page, sort) => {
         const requestId = ++latestRequestId.current;
 
@@ -83,6 +87,9 @@ function ListingPage() {
         window.scrollTo(0, 0);
     };
 
+    // offset is zero-based for the API, but the "Showing X-Y" summary is
+    // one-based for humans, hence the +1. endIndex is clamped to the total
+    // because the final page is usually partial.
     const totalPages = data ? Math.ceil(data.total / ITEMS_PER_PAGE) : 0;
     const startIndex = data ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0;
     const endIndex = data

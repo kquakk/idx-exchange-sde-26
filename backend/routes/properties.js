@@ -2,6 +2,15 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db/pool");
 
+// ORDER BY cannot be parameterized — a `?` placeholder binds a value, not an
+// identifier, so `ORDER BY ?` sends the literal string 'L_SystemPrice' as the
+// sort key. Every row gets the same value, nothing sorts, and MySQL raises no
+// error. Silent failure is worse than a crash, so sort columns are whitelisted
+// here and interpolated directly after validation.
+//
+// The keys are public API names rather than raw column names, which keeps the
+// RETS schema out of the API surface and means a column rename touches only
+// this object.
 const SORT_COLUMNS = {
     price: "L_SystemPrice",
     dateListed: "L_ListingDate",
@@ -28,6 +37,9 @@ router.get("/", async(req, res) => {
             return res.status(400).json({ error: "limit must be a non-negative integer" });
         }
 
+        // Query string values always arrive as strings. Without this guard,
+        // Number("abc") becomes NaN, gets bound into the SQL, and surfaces as a
+        // confusing 500 rather than a 400 that tells the caller what was wrong.
         const numericFilters = { minPrice, maxPrice, beds, baths };
         for (const [key, value] of Object.entries(numericFilters)) {
             if (value !== undefined && (isNaN(Number(value)) || Number(value) < 0)) {
@@ -35,6 +47,15 @@ router.get("/", async(req, res) => {
             }
         }
 
+        // Filters are optional and freely combinable, so the WHERE clause is built
+        // dynamically: each active filter pushes a condition fragment into one array
+        // and its value into another. The arrays stay in lockstep, so the ? placeholders
+        // line up with the bound values in order when joined with AND.
+        //
+        // The `!== undefined` checks below are deliberate rather than truthiness checks.
+        // minPrice=0 and beds=0 are legitimate filters, and `if (minPrice)` would drop
+        // them silently — producing a total count that disagrees with the results the
+        // user actually sees.
         const conditions = [];
         const values = [];
 
@@ -74,6 +95,10 @@ router.get("/", async(req, res) => {
         const [countRows] = await pool.query(countSql, values);
         const total = countRows[0].total;
 
+        // L_ListingID is appended as a secondary sort key so the ordering is total.
+        // Without it, rows tied on the primary key (same price, same sqft) can come
+        // back in a different order on each request — which means a property can appear
+        // on both page 2 and page 3 while another never appears at all.
         let orderByClause = "ORDER BY L_ListingID ASC";
         if (sortBy) {
             const column = SORT_COLUMNS[sortBy];
@@ -121,6 +146,10 @@ router.get("/:id/openhouses", async (req, res) => {
             return res.status(404).json({ error: `Property ${id} not found` });
         }
 
+        // all_data is returned unparsed. Some rows in the feed contain malformed JSON,
+        // and parsing here would throw and take down the endpoint for the whole
+        // property. The frontend parses defensively per-row instead, so one bad record
+        // costs one missing remark rather than the entire response.
         const [openHouses] = await pool.query(
             `SELECT L_ListingID, OpenHouseDate, OH_StartTime, OH_EndTime, all_data
             FROM rets_openhouse
