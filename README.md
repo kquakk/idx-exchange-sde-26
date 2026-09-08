@@ -2,12 +2,18 @@
 
 A Zillow-style property search application backed by real MLS (RETS) data.
 
-## Stack
+## Tech Stack
 
-- **Frontend:** React 18 (Create React App), React Router
-- **Backend:** Node.js + Express
-- **Database:** MySQL 8 (Docker)
-- **Testing:** Jest, React Testing Library, Supertest
+| Layer | Technology | Version |
+|---|---|---|
+| Frontend | React (Create React App) | 18.x |
+| Routing | React Router | 6.x |
+| Backend | Node.js | 24.x |
+| API framework | Express | 4.x |
+| Database | MySQL (Docker) | 8.x |
+| DB driver | mysql2 | 3.x |
+| Testing | Jest, React Testing Library, Supertest | — |
+| Linting | ESLint | 9.x |
 
 ## Architecture
 
@@ -18,7 +24,19 @@ React never connects to MySQL directly. All data flows through the Express API.
 
 ## Setup
 
-### 1. Database
+### Prerequisites
+
+- Node.js 18+ and npm
+- Docker Destop
+- Git
+
+### 1. Clone
+```bash
+git clone https://github.com/kquakk/idx-exchange-sde-26.git
+cd idx-exchange-sde-26
+```
+
+### 2. Database
 
 ```bash
 docker run -d --name idx-mysql-local \
@@ -30,7 +48,7 @@ docker exec -i idx-mysql-local mysql -u root -prootpassword rets < path/to/rets_
 docker exec -i idx-mysql-local mysql -u root -prootpassword rets < path/to/rets_openhouse.sql
 ```
 
-### 2. Backend
+### 3. Backend
 
 ```bash
 cd backend
@@ -39,13 +57,18 @@ cp .env.example .env
 npm run dev
 ```
 
-### 3. Frontend
+### 4. Frontend
 
 ```bash
 cd frontend
 npm install
 npm start
 ```
+
+Create `frontend/.env`:
+REACT_APP_GOOGLE_MAPS_API_KEY=your_key_here
+
+Open https://localhost:3000.
 
 ## API Endpoints
 
